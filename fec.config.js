@@ -1,5 +1,5 @@
 module.exports = {
-  appUrl: '/staging/starter',
+  appUrl: '/application-services/service-accounts',
   debug: true,
   useProxy: true,
   proxyVerbose: true,
@@ -23,5 +23,10 @@ module.exports = {
         },
       },
     ],
+  },
+  routes: {
+    '/api/chrome-service/v1/static': {
+      host: 'http://localhost:8000',
+    },
   },
 };

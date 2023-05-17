@@ -1,22 +1,17 @@
+import { Bullseye, Spinner } from '@patternfly/react-core';
 import React, { Suspense, lazy } from 'react';
 import { Route, Routes as RouterRoutes } from 'react-router-dom';
-import { InvalidObject } from '@redhat-cloud-services/frontend-components/InvalidObject';
 
-import { Bullseye, Spinner } from '@patternfly/react-core';
-
-const SamplePage = lazy(
+const ListServiceAccountsPage = lazy(
   () =>
     import(
-      /* webpackChunkName: "SamplePage" */ './Routes/SamplePage/SamplePage'
+      /* webpackChunkName: "ListServiceAccountsPage" */ './Routes/ListServiceAccountsPage/ListServiceAccountsPage'
     )
 );
-const OopsPage = lazy(
-  () => import(/* webpackChunkName: "OopsPage" */ './Routes/OopsPage/OopsPage')
-);
-const NoPermissionsPage = lazy(
+const CreateServiceAccountDialog = lazy(
   () =>
     import(
-      /* webpackChunkName: "NoPermissionsPage" */ './Routes/NoPermissionsPage/NoPermissionsPage'
+      /* webpackChunkName: "CreateServiceAccountDialog" */ './Routes/CreateServiceAccountDialog/CreateServiceAccountDialog'
     )
 );
 
@@ -29,11 +24,9 @@ export const Routes = () => (
     }
   >
     <RouterRoutes>
-      <Route path="no-permissions" element={<NoPermissionsPage />} />
-      <Route path="oops" element={<OopsPage />} />
-      <Route path="/" element={<SamplePage />} />
-      {/* Finally, catch all unmatched routes */}
-      <Route path="*" element={<InvalidObject />} />
+      <Route path="/" element={<ListServiceAccountsPage />}>
+        <Route path="create" element={<CreateServiceAccountDialog />} />
+      </Route>
     </RouterRoutes>
   </Suspense>
 );
