@@ -1,4 +1,4 @@
-import { ServiceAccount } from '../../types';
+import { ServiceAccount } from '../types';
 
 type Options = {
   page?: number;
@@ -14,7 +14,7 @@ export async function fetchServiceAccounts({
   sso,
 }: Options): Promise<{
   serviceAccounts: ServiceAccount[];
-  hasMore: boolean;
+  state: 'no-service-accounts' | 'last-page' | 'results';
 }> {
   const first = (page - 1) * perPage;
   const max = perPage;
@@ -27,5 +27,20 @@ export async function fetchServiceAccounts({
     }
   );
   const data = await response.json();
-  return { serviceAccounts: data, hasMore: response.headers.has('Link') };
+
+  const state = (() => {
+    switch (true) {
+      case page === 1 && data.length === 0:
+        return 'no-service-accounts';
+      case (data.length < perPage && page > 1) || response.headers.has('Link'):
+        return 'last-page';
+      default:
+        return 'results';
+    }
+  })();
+
+  return {
+    serviceAccounts: data,
+    state,
+  };
 }

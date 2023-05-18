@@ -1,4 +1,4 @@
-import { NewServiceAccount } from '../../types';
+import { NewServiceAccount } from '../types';
 
 type Options = {
   name: string;

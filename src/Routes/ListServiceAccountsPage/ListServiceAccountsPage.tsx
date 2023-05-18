@@ -5,61 +5,48 @@ import {
   PageHeaderTitle,
 } from '@redhat-cloud-services/frontend-components/PageHeader';
 import { useChrome } from '@redhat-cloud-services/frontend-components/useChrome';
-import { useQuery } from '@tanstack/react-query';
-import React, { useEffect, useState } from 'react';
-import { Outlet } from 'react-router-dom';
-import { EmptyStateNoServiceAccounts } from '../../Components/EmptyStateNoServiceAccounts';
-import { Loading } from '../../Components/Loading';
-import { ServiceAccountsTable } from '../../Components/ServiceAccountsTable';
-import { fetchServiceAccounts } from './fetchServiceAccounts';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import React, { useEffect } from 'react';
+import { Outlet, useSearchParams } from 'react-router-dom';
+import { fetchServiceAccounts } from '../../shared/fetchServiceAccounts';
+import { EmptyStateNoServiceAccounts } from './EmptyStateNoServiceAccounts';
+import { ServiceAccountsTable } from './ServiceAccountsTable';
 
 const ListServiceAccountsPage = () => {
+  const { appAction } = useChrome();
+
   useEffect(() => {
-    insights?.chrome?.appAction?.('service-accounts-list');
+    appAction('service-accounts-list');
   }, []);
 
   const { auth, getEnvironmentDetails } = useChrome();
-  const [page, setPage] = useState(1);
-  const [perPage, setPerPage] = useState(10);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = parseInt(searchParams.get('page') || '', 10) || 1;
+  const perPage = parseInt(searchParams.get('perPage') || '', 10) || 10;
   //
-  // const handleAlert = () => {
-  //   dispatch(
-  //     addNotification({
-  //       variant: 'success',
-  //       title: 'Notification title',
-  //       description: 'notification description',
-  //     })
-  //   );
-  // };
 
+  const queryClient = useQueryClient();
   const results = useQuery({
-    queryKey: ['service-accounts', page, perPage],
+    queryKey: ['service-accounts', { page, perPage }],
     queryFn: async () => {
       const env = getEnvironmentDetails();
       const token = await auth.getToken();
-      return fetchServiceAccounts({ token, sso: env.sso, page, perPage });
+      const response = await fetchServiceAccounts({
+        token,
+        sso: env.sso,
+        page,
+        perPage,
+      });
+      response.serviceAccounts.forEach((sa) =>
+        queryClient.setQueryData(['service-account', sa.id], sa)
+      );
+      return response;
     },
+    refetchInterval: 1000 * 30,
   });
 
-  const state = (() => {
-    switch (true) {
-      case results.isInitialLoading:
-        return 'initial-load' as const;
-      case results.data &&
-        results.data.serviceAccounts.length === 0 &&
-        page === 1:
-        return 'no-service-accounts' as const;
-      case results.data &&
-        results.data.serviceAccounts.length === 0 &&
-        page > 1:
-        return 'no-more-pagination' as const;
-      default:
-        return 'results' as const;
-    }
-  })();
-
   return (
-    <React.Fragment>
+    <>
       <PageHeader>
         <PageHeaderTitle title="Service Accounts" />
         <p>
@@ -70,24 +57,25 @@ const ListServiceAccountsPage = () => {
       </PageHeader>
       <Main>
         <>
-          {state === 'initial-load' && <Loading />}
-          {state === 'no-service-accounts' && <EmptyStateNoServiceAccounts />}
-          {(state === 'results' || state === 'no-more-pagination') && (
+          {(results.data || results.isLoading) &&
+          results.data?.state !== 'no-service-accounts' ? (
             <ServiceAccountsTable
-              serviceAccounts={results.data!.serviceAccounts}
+              serviceAccounts={results.data?.serviceAccounts || []}
               page={page}
               perPage={perPage}
-              hasMore={state !== 'no-more-pagination'}
+              hasMore={results.data?.state !== 'last-page'}
+              isLoading={results.isLoading}
               onPaginationChange={(page, perPage) => {
-                setPage(page);
-                setPerPage(perPage);
+                setSearchParams({ page: `${page}`, perPage: `${perPage}` });
               }}
             />
+          ) : (
+            <EmptyStateNoServiceAccounts />
           )}
         </>
         <Outlet />
       </Main>
-    </React.Fragment>
+    </>
   );
 };
 

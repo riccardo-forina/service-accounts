@@ -8,10 +8,25 @@ const ListServiceAccountsPage = lazy(
       /* webpackChunkName: "ListServiceAccountsPage" */ './Routes/ListServiceAccountsPage/ListServiceAccountsPage'
     )
 );
-const CreateServiceAccountDialog = lazy(
+
+const CreateServiceAccountPage = lazy(
   () =>
     import(
-      /* webpackChunkName: "CreateServiceAccountDialog" */ './Routes/CreateServiceAccountDialog/CreateServiceAccountDialog'
+      /* webpackChunkName: "CreateServiceAccountPage" */ './Routes/CreateServiceAccountPage/CreateServiceAccountPage'
+    )
+);
+
+const ResetServiceAccountPage = lazy(
+  () =>
+    import(
+      /* webpackChunkName: "ResetServiceAccountPage" */ './Routes/ResetServiceAccountPage/ResetServiceAccountPage'
+    )
+);
+
+const DeleteServiceAccountPage = lazy(
+  () =>
+    import(
+      /* webpackChunkName: "DeleteServiceAccountPage" */ './Routes/DeleteServiceAccountPage/DeleteServiceAccountPage'
     )
 );
 
@@ -25,7 +40,9 @@ export const Routes = () => (
   >
     <RouterRoutes>
       <Route path="/" element={<ListServiceAccountsPage />}>
-        <Route path="create" element={<CreateServiceAccountDialog />} />
+        <Route path="create" element={<CreateServiceAccountPage />} />
+        <Route path="reset/:clientId" element={<ResetServiceAccountPage />} />
+        <Route path="delete/:clientId" element={<DeleteServiceAccountPage />} />
       </Route>
     </RouterRoutes>
   </Suspense>

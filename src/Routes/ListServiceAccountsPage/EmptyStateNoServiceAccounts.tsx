@@ -9,7 +9,7 @@ import {
 import { PlusCircleIcon } from '@patternfly/react-icons';
 import type { VoidFunctionComponent } from 'react';
 import React from 'react';
-import { AppLink } from './AppLink';
+import { AppLink } from '../../shared/AppLink';
 
 export const EmptyStateNoServiceAccounts: VoidFunctionComponent = () => {
   return (

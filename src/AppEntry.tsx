@@ -5,7 +5,14 @@ import logger from 'redux-logger';
 import App from './App';
 import { init } from './store';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      retryDelay: 1000 * 3,
+    },
+  },
+});
 
 const AppEntry = () => (
   <Provider
