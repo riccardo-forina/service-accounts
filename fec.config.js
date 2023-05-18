@@ -1,5 +1,7 @@
+const pkg = require('./package.json');
+
 module.exports = {
-  appUrl: '/application-services/service-accounts',
+  appUrl: pkg.insights.appUrl,
   debug: true,
   useProxy: true,
   proxyVerbose: true,

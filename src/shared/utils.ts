@@ -1,9 +1,10 @@
 import { To } from 'react-router-dom';
 
-export const linkBasename = '/application-services/service-accounts';
+const pkg = require('../../package.json');
+
 export const mergeToBasename = (
   to: To,
-  basename: string = linkBasename
+  basename: string = pkg.insights.appUrl
 ): To => {
   if (typeof to === 'string') {
     // replace possible "//" after basename
