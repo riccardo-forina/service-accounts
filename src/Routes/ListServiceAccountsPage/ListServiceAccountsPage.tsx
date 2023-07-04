@@ -51,8 +51,8 @@ const ListServiceAccountsPage = () => {
         <PageHeaderTitle title="Service Accounts" />
         <p>
           Use service accounts to securely and automatically connect and
-          authenticate services or applications without requiring an end user's
-          credentials or direct interaction.
+          authenticate services or applications without requiring an end
+          user&#39;s credentials or direct interaction.
         </p>
       </PageHeader>
       <Main>
