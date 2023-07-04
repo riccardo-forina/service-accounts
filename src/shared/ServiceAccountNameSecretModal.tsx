@@ -75,7 +75,7 @@ export const ServiceAccountNameSecretModal: VoidFunctionComponent<{
         <TextContent>
           <Text component={TextVariants.small} className="pf-u-mt-lg">
             Make a copy of the client ID and secret to store in a safe place.
-            The client secret won't appear again after closing this screen.
+            The client secret won&#39;t appear again after closing this screen.
           </Text>
         </TextContent>
         <Bullseye className="pf-u-mt-lg">
