@@ -53,3 +53,8 @@ Update `appUrl` string inside `fec.config.js` according to your application URL.
     - `prod-beta` (deployed by pushing to `prod-beta` on this repo)
     - `prod-stable` (deployed by pushing to `prod-stable` on this repo)
 - Travis uploads results to RedHatInsight's [codecov](https://codecov.io) account. To change the account, modify CODECOV_TOKEN on https://travis-ci.com/.
+
+
+### Openapi spec
+
+we are pulling data from back office and openapi spec for it can be found at https://sso.redhat.com/auth/realms/redhat-external/apis/openapi.yaml
