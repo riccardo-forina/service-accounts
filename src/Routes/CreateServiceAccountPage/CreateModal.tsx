@@ -12,7 +12,7 @@ import {
   TextInput,
 } from '@patternfly/react-core';
 import { HelpIcon } from '@patternfly/react-icons';
-import React, { VoidFunctionComponent, useState } from 'react';
+import React, { VoidFunctionComponent, useRef, useState } from 'react';
 import { AppLink } from '../../shared/AppLink';
 import { appendTo } from '../../shared/utils';
 
@@ -37,9 +37,9 @@ export const CreateModal: VoidFunctionComponent<CreateModalProps> = ({
 }) => {
   const [validate, setValidate] = useState(false);
   const [name, setName] = useState('');
+  const submitButton = useRef();
 
-  const validity = (() => {
-    //validate required field
+  const validity = React.useMemo(() => {
     if (name === undefined || name.trim() === '') {
       return 'empty-name' as const;
     } else if (!/^[a-z]([-a-z0-9]*[a-z0-9])?$/.test(name.trim())) {
@@ -50,12 +50,17 @@ export const CreateModal: VoidFunctionComponent<CreateModalProps> = ({
       return 'invalid-length' as const;
     }
     return 'valid' as const;
-  })();
+  }, [validate]);
 
-  const validated = validate && validity !== 'valid' ? 'error' : undefined;
-
-  const doValidate = () => {
-    setValidate(true);
+  const doValidate = (event: FocusEvent) => {
+    if (
+      !event.relatedTarget ||
+      (submitButton.current as unknown as Element).isEqualNode(
+        event.relatedTarget as Node
+      )
+    ) {
+      setValidate(true);
+    }
   };
 
   const handleSubmit: FormProps['onSubmit'] = (ev) => {
@@ -81,6 +86,7 @@ export const CreateModal: VoidFunctionComponent<CreateModalProps> = ({
           variant="primary"
           type={'submit'}
           form={FORM_ID}
+          ref={submitButton}
           isLoading={isCreating}
           isDisabled={isCreating}
         >
@@ -130,7 +136,7 @@ export const CreateModal: VoidFunctionComponent<CreateModalProps> = ({
             value={name}
             onChange={(_event, val) => setName(val)}
             onBlur={doValidate}
-            validated={validated}
+            validated={validate && validity !== 'valid' ? 'error' : undefined}
             autoFocus={true}
             ouiaId={'text-input'}
           />
