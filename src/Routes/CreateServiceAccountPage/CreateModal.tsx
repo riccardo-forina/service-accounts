@@ -103,22 +103,22 @@ export const CreateModal: VoidFunctionComponent<CreateModalProps> = ({
     >
       <Form onSubmit={handleSubmit} id={FORM_ID} disabled={!validity}>
         <FormGroup
-          label={'Short description'}
+          label={'Service Account Name'}
           isRequired
-          fieldId="short-description-field"
+          fieldId="name-field"
           labelIcon={
             <Popover
-              headerContent={<div>Short description</div>}
+              headerContent={<div>Service Account Name</div>}
               bodyContent={
                 <div>
-                  Please provide a simple and short description of the service
+                  Please provide a simple and short name of the service
                   account you are creating
                 </div>
               }
             >
               <button
-                aria-label="short description of service account"
-                aria-describedby="short-description-field"
+                aria-label="name of service account"
+                aria-describedby="name-field"
                 className="pf-c-form__group-label-help"
                 type={'button'}
                 onClick={(e) => e.preventDefault()}
@@ -131,8 +131,8 @@ export const CreateModal: VoidFunctionComponent<CreateModalProps> = ({
           <TextInput
             isRequired
             type="text"
-            id="text-input-short-description"
-            name="text-input-short-description"
+            id="text-input-name"
+            name="text-input-name"
             value={name}
             onChange={(_event, val) => setName(val)}
             onBlur={doValidate}

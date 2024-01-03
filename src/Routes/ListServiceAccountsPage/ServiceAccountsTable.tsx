@@ -58,7 +58,7 @@ export const ServiceAccountsTable: FC<{
       <Table aria-label="List of created service accounts">
         <Thead>
           <Tr>
-            <Th>Description</Th>
+            <Th>Name</Th>
             <Th>Client ID</Th>
             <Th>Owner</Th>
             <Th>Time created</Th>
@@ -69,7 +69,7 @@ export const ServiceAccountsTable: FC<{
           {isLoading &&
             new Array(perPage).fill(0).map((_, idx) => (
               <Tr key={idx}>
-                <Td dataLabel={'Description'}>
+                <Td dataLabel={'Name'}>
                   <Skeleton screenreaderText={'Loading service accounts'} />
                 </Td>
                 <Td dataLabel={'Client ID'}>
@@ -90,7 +90,7 @@ export const ServiceAccountsTable: FC<{
             serviceAccounts.length > 0 &&
             serviceAccounts.map((sa) => (
               <Tr key={sa.id}>
-                <Td dataLabel={'Description'}>{sa.name}</Td>
+                <Td dataLabel={'Name'}>{sa.name}</Td>
                 <Td dataLabel={'Client ID'}>{sa.clientId}</Td>
                 <Td dataLabel={'Owner'}>{sa.createdBy}</Td>
                 <Td dataLabel={'Time created'}>
